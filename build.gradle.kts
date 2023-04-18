@@ -5,15 +5,14 @@ buildscript {
 }
 
 plugins {
-    kotlin("jvm") version "1.8.0"
-    kotlin("plugin.serialization") version "1.8.20"
+    kotlin("jvm") version "1.8.10"
     idea
     id("org.jmailen.kotlinter") version "3.12.0"
     id("library-publish") version "1.0.0"
 }
 
 group = "crackers.automation"
-version = "1.0-SNAPSHOT"
+version = "0.0.1"
 val jacksonVersion = "2.14.2"
 
 repositories {
@@ -22,6 +21,7 @@ repositories {
 }
 
 dependencies {
+    // TODO maybe later
 //    api(platform("com.fasterxml.jackson:jackson-bom:$jacksonVersion"))
 //    api("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
 //    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
