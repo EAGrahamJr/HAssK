@@ -5,6 +5,8 @@
   - uses _async_ under the covers, so multi-threading is provided out-of-the-box
 - Minimal external libraries (`SLF4J`, `org.json`)
 
+![Just Build](https://github.com/EAGrahamJr/HAssK/actions/workflows/build.yaml/badge.svg)
+
 ## Examples
 
 ```kotlin
