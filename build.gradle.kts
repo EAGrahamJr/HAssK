@@ -21,16 +21,12 @@ repositories {
 }
 
 dependencies {
-    // TODO maybe later
-//    api(platform("com.fasterxml.jackson:jackson-bom:$jacksonVersion"))
-//    api("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
-//    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
-//    api("com.fasterxml.jackson.module:jackson-module-kotlin")
-
+    api("org.json:json:20230227")
     api("ch.qos.logback:logback-classic:1.4.0")
 
     testImplementation("io.kotest:kotest-runner-junit5:5.5.4")
-    testImplementation("io.mockk:mockk:1.13.3")}
+    testImplementation("io.mockk:mockk:1.13.3")
+}
 
 kotlin {
     jvmToolchain(17)
@@ -52,4 +48,4 @@ tasks {
     }
 }
 
-defaultTasks("clean","libraryDistribution")
+defaultTasks("clean", "build", "libraryDistribution")
