@@ -16,6 +16,15 @@ jobs:
   just-build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout build plugins
+        uses: actions/checkout@v3
+        with:
+          repository: EAGrahamJr/gradle-scripts
+          path: gradle-scripts
+      - name: Build plugins
+        run: |
+          cd gradle-scripts
+          ./gradlew --no-daemon --quiet build publishToMavenLocal
       - name: Checkout
         uses: actions/checkout@v3
       - name: Java
