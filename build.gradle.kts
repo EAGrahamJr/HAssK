@@ -1,6 +1,6 @@
 buildscript {
     dependencies {
-        classpath("crackers.buildstuff:crackers-gradle-plugins:1.0.0")
+        classpath("crackers.buildstuff:crackers-gradle-plugins:1.0.1")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20-RC")
     }
 }
@@ -9,7 +9,7 @@ plugins {
     kotlin("jvm") version "1.8.20"
     idea
     id("org.jmailen.kotlinter") version "3.12.0"
-    id("library-publish") version "1.0.0"
+    id("library-publish") version "1.0.1"
     id("org.jetbrains.dokka") version "1.8.10"
 }
 
@@ -50,12 +50,14 @@ tasks {
     }
     dokkaGfm {
         outputDirectory.set(file("$projectDir/docs"))
-
     }
     register<Jar>("dokkaJavadocJar") {
         dependsOn(dokkaJavadoc)
         from(dokkaJavadoc.flatMap { it.outputDirectory })
         archiveClassifier.set("javadoc")
+    }
+    generateMetadataFileForLibraryPublication {
+        mustRunAfter("dokkaJavadocJar")
     }
 }
 
