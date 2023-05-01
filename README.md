@@ -31,12 +31,9 @@ fun main() {
 
 ## Building
 
-This project uses [Gradle](https://gradle.org), so the only thing you need is a compatible JDK<sup>**1**</sup>.
-Additionally, because the project is [Kotlin](https://kotlinlang.org) and uses the _Kotlin Gradle plugin_, a Kotlin
-installation is also not necessary.
+This project uses [Gradle](https://gradle.org), so the only thing you need is a compatible JDK<sup>**1**</sup>. Additionally, because the project is [Kotlin](https://kotlinlang.org) and uses the _Kotlin Gradle plugin_, a Kotlin installation is also not necessary.
 
-A default build will use the [gradle-plugins](https://github.com/EAGrahamJr/gradle-scripts) to publish to the "local"
-Maven repository.
+A default build will use the [gradle-plugins](https://github.com/EAGrahamJr/gradle-scripts) to publish to the "local" Maven repository.
 
 [Documentation](docs) is created via the `dokka` plugin: Javadocs **are** created on build (but not published, yet).
 
