@@ -65,7 +65,7 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
     }
 
     /**
-     * Request the state of a thing
+     * Request the state of a thing.
      *
      * @param entityId the id
      */
@@ -134,25 +134,37 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
             }
         }
 
+    /**
+     * Retrieves the state of the entity.
+     */
     fun Entity.state() = getState(entityId)
 
     /**
-     * Create an entity in the "light" domain (do not prefix with "light.")
+     * Create an entity in the "light" domain (do **not** prefix with "light.")
+     *
+     * @param name the name
+     * @return a [Light]
      */
     fun light(name: String) = Light(name)
 
     /**
-     * Create a group in the "light" domain (do not prefix with "light.")
+     * Create a group in the "light" domain (do **not** prefix with "light.")
+     *
+     * @param name the name
+     * @return a [Light] that has `isGroup == true`
      */
     fun group(name: String) = Light(name, true)
 
     /**
-     * Create a scene in the "scene" domain (do not prefix with "scene.")
+     * Create an entity in the "scene" domain (do **not** prefix with "scene.")
+     *
+     * @param name the name
+     * @return a [Scene]
      */
     fun scene(name: String) = Scene(name)
 
     /**
-     * Basic thing
+     * Basic "thing".
      *
      * @property entityId everything should have a unique ID
      */
@@ -161,7 +173,9 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
     }
 
     /**
-     * A light
+     * A light-type entity.
+     *
+     * This may be a single light or a group, acting as a single item.
      *
      * @property isGroup group of lights (or not)
      */
@@ -170,7 +184,7 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
     }
 
     /**
-     * Pre-determined group of entities at certain states.
+     * A pre-determined group of entities at certain states.
      */
     class Scene(name: String) : Entity {
         override val entityId = "scene.$name"

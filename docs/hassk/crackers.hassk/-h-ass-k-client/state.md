@@ -4,3 +4,5 @@
 
 [jvm]\
 fun [HAssKClient.Entity](-entity/index.md).[state](state.md)(): [EntityState](../-entity-state/index.md)
+
+Retrieves the state of the entity.

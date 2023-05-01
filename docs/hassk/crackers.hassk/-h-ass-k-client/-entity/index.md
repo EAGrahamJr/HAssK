@@ -4,7 +4,7 @@
 
 interface [Entity](index.md)
 
-Basic thing
+Basic &quot;thing&quot;.
 
 #### Inheritors
 

@@ -5,7 +5,7 @@
 [jvm]\
 class [Scene](index.md)(name: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)) : [HAssKClient.Entity](../-entity/index.md)
 
-Pre-determined group of entities at certain states.
+A pre-determined group of entities at certain states.
 
 ## Constructors
 

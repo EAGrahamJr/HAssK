@@ -5,7 +5,9 @@
 [jvm]\
 class [Light](index.md)(name: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html), val isGroup: [Boolean](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) = false) : [HAssKClient.Entity](../-entity/index.md)
 
-A light
+A light-type entity.
+
+This may be a single light or a group, acting as a single item.
 
 ## Constructors
 

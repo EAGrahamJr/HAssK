@@ -5,7 +5,7 @@
 [jvm]\
 fun [getState](get-state.md)(entityId: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [EntityState](../-entity-state/index.md)
 
-Request the state of a thing
+Request the state of a thing.
 
 #### Parameters
 
