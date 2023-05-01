@@ -1,14 +1,16 @@
 buildscript {
     dependencies {
         classpath("crackers.buildstuff:crackers-gradle-plugins:1.0.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20-RC")
     }
 }
 
 plugins {
-    kotlin("jvm") version "1.8.10"
+    kotlin("jvm") version "1.8.20"
     idea
     id("org.jmailen.kotlinter") version "3.12.0"
     id("library-publish") version "1.0.0"
+    id("org.jetbrains.dokka") version "1.8.10"
 }
 
 group = "crackers.automation"
@@ -46,6 +48,15 @@ tasks {
     test {
         useJUnitPlatform()
     }
+    dokkaGfm {
+        outputDirectory.set(file("$projectDir/docs"))
+
+    }
+    register<Jar>("dokkaJavadocJar") {
+        dependsOn(dokkaJavadoc)
+        from(dokkaJavadoc.flatMap { it.outputDirectory })
+        archiveClassifier.set("javadoc")
+    }
 }
 
-defaultTasks("clean", "build", "libraryDistribution")
+defaultTasks("clean", "build", "dokkaJavadocJar", "libraryDistribution")
