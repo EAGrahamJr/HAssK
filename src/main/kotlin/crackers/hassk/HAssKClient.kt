@@ -17,7 +17,12 @@ import java.time.ZonedDateTime
  * @property state the state, based on the entity
  * @property changed when it was changed on HA
  */
-data class EntityState(val entityId: String, val state: String, val changed: ZonedDateTime)
+data class EntityState(
+    val entityId: String,
+    val state: String,
+    val changed: ZonedDateTime,
+    val attributes: String? = null
+)
 
 /**
  * DSL constants
@@ -86,7 +91,8 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
     protected fun parseState(stateResponse: JSONObject) = EntityState(
         stateResponse.getString("entity_id"),
         stateResponse.getString("state"),
-        ZonedDateTime.parse(stateResponse.getString("last_changed"))
+        ZonedDateTime.parse(stateResponse.getString("last_changed")),
+        if (stateResponse.has("attributes")) stateResponse.getJSONObject("attributes").toString() else null
     )
 
     /**

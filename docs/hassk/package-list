@@ -5,7 +5,8 @@ $dokka.location:crackers.hassk/Constants///PointingToDeclaration/hassk/crackers
 $dokka.location:crackers.hassk/Constants/off/#/PointingToDeclaration/hassk/crackers.hassk/-constants/off.md
 $dokka.location:crackers.hassk/Constants/on/#/PointingToDeclaration/hassk/crackers.hassk/-constants/on.md
 $dokka.location:crackers.hassk/EntityState///PointingToDeclaration/hassk/crackers.hassk/-entity-state/index.md
-$dokka.location:crackers.hassk/EntityState/EntityState/#kotlin.String#kotlin.String#java.time.ZonedDateTime/PointingToDeclaration/hassk/crackers.hassk/-entity-state/-entity-state.md
+$dokka.location:crackers.hassk/EntityState/EntityState/#kotlin.String#kotlin.String#java.time.ZonedDateTime#kotlin.String?/PointingToDeclaration/hassk/crackers.hassk/-entity-state/-entity-state.md
+$dokka.location:crackers.hassk/EntityState/attributes/#/PointingToDeclaration/hassk/crackers.hassk/-entity-state/attributes.md
 $dokka.location:crackers.hassk/EntityState/changed/#/PointingToDeclaration/hassk/crackers.hassk/-entity-state/changed.md
 $dokka.location:crackers.hassk/EntityState/entityId/#/PointingToDeclaration/hassk/crackers.hassk/-entity-state/entity-id.md
 $dokka.location:crackers.hassk/EntityState/state/#/PointingToDeclaration/hassk/crackers.hassk/-entity-state/state.md
