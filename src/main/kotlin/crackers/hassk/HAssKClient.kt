@@ -63,8 +63,8 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
         val request = startRequest(uri)
             .POST(HttpRequest.BodyPublishers.ofString(payload))
             .build().also {
-                logger.info("Request: $it")
-                logger.info("Payload: $payload")
+                logger.debug("Request: $it")
+                logger.debug("Payload: $payload")
             }
         return sendIt(request)
     }
@@ -80,7 +80,7 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
             .GET()
             .build()
         return sendIt(request).let {
-            logger.info(it)
+            logger.debug("Sending $it")
             parseState(JSONObject(it))
         }
     }
@@ -116,7 +116,7 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
                 throw IOException("Error from HA - see logs")
             }
             response.body().also {
-                logger.info("Response: $it")
+                logger.debug("Response: $it")
             }
         }
     }

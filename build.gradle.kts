@@ -45,12 +45,23 @@ tasks {
     build {
         dependsOn("formatKotlin")
     }
+    check {
+//        dependsOn("installKotlinterPrePushHook")
+        dependsOn("formatKotlin")
+    }
     test {
         useJUnitPlatform()
     }
-    dokkaGfm {
-        outputDirectory.set(file("$projectDir/docs"))
+    // make docs
+    dokkaJavadoc {
+        mustRunAfter("javadoc")
+        outputDirectory.set(file("$projectDir/build/docs"))
     }
+    javadocJar {
+        mustRunAfter("dokkaJavadoc")
+        include("$projectDir/build/docs")
+    }
+    // jar docs
     register<Jar>("dokkaJavadocJar") {
         dependsOn(dokkaJavadoc)
         from(dokkaJavadoc.flatMap { it.outputDirectory })
