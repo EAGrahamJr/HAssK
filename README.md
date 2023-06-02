@@ -7,6 +7,8 @@
 
 ![Just Build](https://github.com/EAGrahamJr/HAssK/actions/workflows/build.yaml/badge.svg)
 
+[Javadocs](https://eagrahamjr.github.io/HAssK)
+
 ## Examples
 
 ```kotlin
