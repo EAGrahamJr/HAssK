@@ -170,6 +170,14 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
     fun scene(name: String) = Scene(name)
 
     /**
+     * Create an entity in the "switch" domain (do **not** prefix with "switch.")
+     *
+     * @param name the name
+     * @return a [Switch]
+     */
+    fun switch(name: String) = Switch(name)
+
+    /**
      * Basic "thing".
      *
      * @property entityId everything should have a unique ID
@@ -194,5 +202,12 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
      */
     class Scene(name: String) : Entity {
         override val entityId = "scene.$name"
+    }
+
+    /**
+     * A switch-type entity.
+     */
+    class Switch(name: String) : Entity {
+        override val entityId = "switch.$name"
     }
 }
