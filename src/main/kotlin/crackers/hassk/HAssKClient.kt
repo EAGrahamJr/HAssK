@@ -178,6 +178,14 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
     fun switch(name: String) = Switch(name)
 
     /**
+     * Create an entity in the "sensor" domain (do **not** prefix with "sensor.")
+     *
+     * @param name the name
+     * @return a [Sensor]
+     */
+    fun sensor(name: String) = Sensor(name)
+
+    /**
      * Basic "thing".
      *
      * @property entityId everything should have a unique ID
@@ -209,5 +217,12 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
      */
     class Switch(name: String) : Entity {
         override val entityId = "switch.$name"
+    }
+
+    /**
+     * A sensor entity. **NOTE** Sensors are "read-only" and will not generally respond to commands.
+     */
+    class Sensor(name: String) : Entity {
+        override val entityId = "sensor.$name"
     }
 }
