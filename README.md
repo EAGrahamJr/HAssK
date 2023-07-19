@@ -5,7 +5,7 @@
   - uses _async_ under the covers, so multi-threading is provided out-of-the-box
 - Minimal external libraries (`SLF4J`, `org.json`)
 
-![Just Build](https://github.com/EAGrahamJr/HAssK/actions/workflows/build.yaml/badge.svg)
+![Just Build](https://github.com/EAGrahamJr/HAssK/actions/workflows/build.yaml/badge.svg) ![Kotlin](https://badgen.net/badge/Kotlin/1.8.22/purple)  ![Java](https://badgen.net/badge/Java/17/orange) ![Apache License](https://badgen.net/github/license/EAGrahamJr/HAssK)
 
 [Javadocs](https://eagrahamjr.github.io/HAssK)
 

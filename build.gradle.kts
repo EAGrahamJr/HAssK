@@ -1,12 +1,12 @@
 buildscript {
     dependencies {
         classpath("crackers.buildstuff:crackers-gradle-plugins:1.0.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.20-RC")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22")
     }
 }
 
 plugins {
-    kotlin("jvm") version "1.8.20"
+    kotlin("jvm") version "1.8.22"
     idea
     id("org.jmailen.kotlinter") version "3.12.0"
     id("library-publish") version "1.0.1"
