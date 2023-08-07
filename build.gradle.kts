@@ -24,7 +24,7 @@ repositories {
 
 dependencies {
     api("org.json:json:20230227")
-    api("ch.qos.logback:logback-classic:1.4.0")
+    api("org.slf4j:slf4j-api:2.0.0")
 
     testImplementation("io.kotest:kotest-runner-junit5:5.5.4")
     testImplementation("io.mockk:mockk:1.13.3")
