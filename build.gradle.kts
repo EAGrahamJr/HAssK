@@ -1,7 +1,6 @@
 buildscript {
     dependencies {
         classpath("crackers.buildstuff:crackers-gradle-plugins:1.0.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22")
     }
 }
 
@@ -28,6 +27,7 @@ dependencies {
 
     testImplementation("io.kotest:kotest-runner-junit5:5.5.4")
     testImplementation("io.mockk:mockk:1.13.3")
+    testImplementation("org.slf4j:slf4j-simple:2.0.0")
 }
 
 kotlin {
