@@ -5,16 +5,15 @@ buildscript {
 }
 
 plugins {
-    kotlin("jvm") version "1.8.22"
+    kotlin("jvm") version "1.9.0"
     idea
     id("org.jmailen.kotlinter") version "3.12.0"
     id("library-publish") version "1.0.1"
     id("org.jetbrains.dokka") version "1.8.10"
+    id("net.thauvin.erik.gradle.semver") version "1.0.4"
 }
 
 group = "crackers.automation"
-version = "0.0.1"
-val jacksonVersion = "2.14.2"
 
 repositories {
     mavenCentral()
