@@ -343,7 +343,7 @@ public class <span class="typeNameLabel"><a href=HAssKClient.html>HAssKClient</a
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=HAssKClient.html#turn(crackers.hassk.HAssKClient.Entity,java.lang.Boolean)>turn</a>(<a href=HAssKClient.Entity.html>HAssKClient.Entity</a> $self, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> on) </code>
                                             </th>
-                                            <td class="colLast">Generic turn on/off<pre><code>with(haCliewnt) {
+                                            <td class="colLast">Generic turn on/off<pre><code>with(haClient) {
     light(&quot;foo&quot;) turn on
     group(&quot;bar&quot;) turn off
 }</code></pre></td>
@@ -395,6 +395,14 @@ public class <span class="typeNameLabel"><a href=HAssKClient.html>HAssKClient</a
                                             <th class="colSecond" scope="row"><code><a href=HAssKClient.html#sensor(java.lang.String)>sensor</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> name) </code>
                                             </th>
                                             <td class="colLast">Create an entity in the &quot;sensor&quot; domain (do not prefix with &quot;sensor.</td>
+                                        </tr>
+                                        
+                                        <tr id="i13" class="rowColor">
+                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=EntityState.html>EntityState</a>&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=HAssKClient.html#states(java.lang.String)>states</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> domain) </code>
+                                            </th>
+                                            <td class="colLast">Uses the state JSON API to get a list of entities and their states.</td>
                                         </tr>
                                         
                                         </tbody>
@@ -593,7 +601,7 @@ public class <span class="typeNameLabel"><a href=HAssKClient.html>HAssKClient</a
                                     <li class="blockList">
                                         <h4>turn</h4>
                                         <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=EntityState.html>EntityState</a>&gt; <a href=HAssKClient.html#turn(crackers.hassk.HAssKClient.Entity,java.lang.Boolean)>turn</a>(<a href=HAssKClient.Entity.html>HAssKClient.Entity</a> $self, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> on)</pre>
-                                        <div class="block"><p>Generic turn on/off</p><pre><code>with(haCliewnt) {
+                                        <div class="block"><p>Generic turn on/off</p><pre><code>with(haClient) {
     light(&quot;foo&quot;) turn on
     group(&quot;bar&quot;) turn off
 }</code></pre></div>
@@ -717,7 +725,7 @@ public class <span class="typeNameLabel"><a href=HAssKClient.html>HAssKClient</a
                                     <!--   -->
                                 </a>
                                 <ul class=
-                                              "blockListLast"
+                                              "blockList"
                                           >
                                     <li class="blockList">
                                         <h4>sensor</h4>
@@ -732,6 +740,21 @@ public class <span class="typeNameLabel"><a href=HAssKClient.html>HAssKClient</a
                                             
                                             
                                         </dl>
+                                        
+                                        <!-- TODO missing return annotation -->
+                                    </li>
+                                </ul>
+                                
+                                <a id="states(java.lang.String)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockListLast"
+                                          >
+                                    <li class="blockList">
+                                        <h4>states</h4>
+                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=EntityState.html>EntityState</a>&gt; <a href=HAssKClient.html#states(java.lang.String)>states</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> domain)</pre>
+                                        <div class="block"><p>Uses the state JSON API to get a list of entities and their states. It is filtered by the optional <a href=HAssKClient.html#states(java.lang.String)>domain</a>.</p></div>
                                         
                                         <!-- TODO missing return annotation -->
                                     </li>

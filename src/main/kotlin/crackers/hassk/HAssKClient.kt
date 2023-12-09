@@ -64,7 +64,7 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
     protected val client = HttpClient.newBuilder()
         .version(HttpClient.Version.HTTP_1_1)
         .build()
-    protected val logger = LoggerFactory.getLogger(this::class.java)
+    protected val logger = LoggerFactory.getLogger(javaClass.simpleName)
 
     /**
      * Set up generic service call that uses the entity ID as the payload.
@@ -79,7 +79,7 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
         val request = startRequest(uri)
             .POST(HttpRequest.BodyPublishers.ofString(payload))
             .build().also {
-                logger.debug("Request: $it")
+                logger.debug("Request: {}", uri)
                 logger.debug("Payload: $payload")
             }
         return sendIt(request)
@@ -96,7 +96,7 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
             .GET()
             .build()
         return sendIt(request).let {
-            logger.debug("Sending $it")
+            logger.debug("Receiving: $it")
             parseState(JSONObject(it))
         }
     }
@@ -141,20 +141,16 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
      * Generic turn on/off
      *
      * ```kotlin
-     * with(haCliewnt) {
+     * with(haClient) {
      *     light("foo") turn on
      *     group("bar") turn off
      * }
      * ```
      */
-    infix fun Entity.turn(on: Boolean): List<EntityState> =
-        callService(entityId, "homeassistant", "turn_${if (on) "on" else "off"}").let {
-            JSONArray(it).map {
-//                val entity = it as JSONObject
-//                val isGroup = entity.getJSONObject("attributes").has("entity_id")
-                parseState(it as JSONObject)
-            }
-        }
+    infix fun Entity.turn(on: Boolean): List<EntityState> {
+        val response = callService(entityId, "homeassistant", "turn_${if (on) "on" else "off"}")
+        return JSONArray(response).map { parseState(it as JSONObject) }
+    }
 
     /**
      * Retrieves the state of the entity.
@@ -200,6 +196,16 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
      * @return a [Sensor]
      */
     fun sensor(name: String) = Sensor(name)
+
+    /**
+     * Uses the state JSON API to get a list of entities and their states. It is filtered by the optional [domain].
+     */
+    fun states(domain: String? = null): List<EntityState> {
+        val response = sendIt(startRequest(URI.create("$serverUri/states")).build())
+        return JSONArray(response)
+            .map { parseState(it as JSONObject) }
+            .filter { domain == null || it.entityId.startsWith("$domain.") }
+    }
 
     /**
      * Basic "thing".
