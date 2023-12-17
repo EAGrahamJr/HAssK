@@ -25,6 +25,7 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.time.ZonedDateTime
+import kotlin.math.roundToInt
 
 /**
  * Data about an entity's current state.
@@ -73,8 +74,16 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
      * @param serviceType which service
      * @param serviceCommand the command
      */
-    fun callService(entityId: String, serviceType: String, serviceCommand: String): String {
-        val payload = """{"entity_id":"$entityId"}""".trimIndent()
+    fun callService(
+        entityId: String,
+        serviceType: String,
+        serviceCommand: String,
+        extraData: Map<String, Any> = emptyMap()
+    ): String {
+        val payload = JSONObject().apply {
+            put("entity_id", entityId)
+            extraData.forEach { (k, v) -> put(k, v) }
+        }.toString()
         val uri = URI.create("$serverUri/services/$serviceType/$serviceCommand")
         val request = startRequest(uri)
             .POST(HttpRequest.BodyPublishers.ofString(payload))
@@ -149,6 +158,26 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
      */
     infix fun Entity.turn(on: Boolean): List<EntityState> {
         val response = callService(entityId, "homeassistant", "turn_${if (on) "on" else "off"}")
+        return JSONArray(response).map { parseState(it as JSONObject) }
+    }
+
+    /**
+     * Set a light level for a light/group.
+     * @param level 0-100
+     *
+     * ```kotlin
+     * with(haClient) {
+     *    light("foo") set 50
+     *    group("bar") set 0
+     * }
+     * ```
+     */
+    infix fun Light.set(level: Int): List<EntityState> {
+        if (level <= 0) return turn(Constants.off)
+
+        val actual = (level * 255f / 100).roundToInt().coerceIn(1, 255)
+        val brightness = mapOf("brightness" to actual)
+        val response = callService(entityId, "homeassistant", "turn_on", brightness)
         return JSONArray(response).map { parseState(it as JSONObject) }
     }
 
