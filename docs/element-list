@@ -1,9 +1,0 @@
-$dokka.format:javadoc-v1
-$dokka.linkExtension:html
-$dokka.location:crackers.hassk/HAssKClient.Entity///PointingToDeclaration/crackers/hassk/HAssKClient.Entity.html
-$dokka.location:crackers.hassk/HAssKClient.Light///PointingToDeclaration/crackers/hassk/HAssKClient.Light.html
-$dokka.location:crackers.hassk/HAssKClient.Scene///PointingToDeclaration/crackers/hassk/HAssKClient.Scene.html
-$dokka.location:crackers.hassk/HAssKClient.Sensor///PointingToDeclaration/crackers/hassk/HAssKClient.Sensor.html
-$dokka.location:crackers.hassk/HAssKClient.Switch///PointingToDeclaration/crackers/hassk/HAssKClient.Switch.html
-crackers.hassk
-
