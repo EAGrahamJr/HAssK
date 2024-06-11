@@ -219,6 +219,11 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
     fun switch(name: String) = Switch(name)
 
     /**
+     * Create an entity in the "media_player" domain ( do **not** prefix with "media_player.")
+     */
+    fun media(name: String) = MediaPlayer(name)
+
+    /**
      * Create an entity in the "sensor" domain (do **not** prefix with "sensor.")
      *
      * @param name the name
@@ -243,6 +248,7 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
      */
     interface Entity {
         val entityId: String
+        val domain: String
     }
 
     /**
@@ -253,27 +259,79 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
      * @property isGroup group of lights (or not)
      */
     class Light(name: String, val isGroup: Boolean = false) : Entity {
-        override val entityId = "light.$name"
+        override val domain = "light"
+        override val entityId = "$domain.$name"
     }
 
     /**
      * A pre-determined group of entities at certain states.
      */
     class Scene(name: String) : Entity {
-        override val entityId = "scene.$name"
+        override val domain = "scene"
+        override val entityId = "$domain.$name"
     }
 
     /**
      * A switch-type entity.
      */
     class Switch(name: String) : Entity {
-        override val entityId = "switch.$name"
+        override val domain = "switch"
+        override val entityId = "$domain.$name"
     }
 
     /**
      * A sensor entity. **NOTE** Sensors are "read-only" and will not generally respond to commands.
      */
     class Sensor(name: String) : Entity {
-        override val entityId = "sensor.$name"
+        override val domain = "sensor"
+        override val entityId = "$domain.$name"
+    }
+
+    class MediaPlayer(val name: String) : Entity {
+        override val domain = "media_player"
+        override val entityId = "$domain.$name"
+    }
+
+    fun MediaPlayer.pause(): List<EntityState> {
+        val response = callService(entityId, domain, "media_pause")
+        return JSONArray(response).map { parseState(it as JSONObject) }
+    }
+
+    fun MediaPlayer.play(): List<EntityState> {
+        val response = callService(entityId, domain, "media_play")
+        return JSONArray(response).map { parseState(it as JSONObject) }
+    }
+
+    fun MediaPlayer.stop(): List<EntityState> {
+        val response = callService(entityId, domain, "media_stop")
+        return JSONArray(response).map { parseState(it as JSONObject) }
+    }
+
+    fun MediaPlayer.next(): List<EntityState> {
+        val response = callService(entityId, domain, "media_next_track")
+        return JSONArray(response).map { parseState(it as JSONObject) }
+    }
+
+    fun MediaPlayer.previous(): List<EntityState> {
+        val response = callService(entityId, domain, "media_previous_track")
+        return JSONArray(response).map { parseState(it as JSONObject) }
+    }
+
+    fun MediaPlayer.volumeUp(): List<EntityState> {
+        val response = callService(entityId, domain, "volume_up")
+        return JSONArray(response).map { parseState(it as JSONObject) }
+    }
+
+    fun MediaPlayer.volumeDown(): List<EntityState> {
+        val response = callService(entityId, "homeassistant", "volume_down")
+        return JSONArray(response).map { parseState(it as JSONObject) }
+    }
+
+    operator fun MediaPlayer.unaryPlus() = volumeUp()
+    operator fun MediaPlayer.unaryMinus() = volumeDown()
+
+    infix fun MediaPlayer.selectSource(name: String): List<EntityState> {
+        val response = callService(entityId, domain, "play_media", mapOf("source" to name))
+        return JSONArray(response).map { parseState(it as JSONObject) }
     }
 }

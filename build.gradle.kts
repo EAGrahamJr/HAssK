@@ -6,6 +6,7 @@ buildscript {
 
 plugins {
     kotlin("jvm") version "1.9.0"
+    `java-library`
     idea
     id("org.jmailen.kotlinter") version "3.12.0"
     id("library-publish") version "1.0.1"
@@ -21,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    api("org.json:json:20230227")
+    api("org.json:json:20231013")
     api("org.slf4j:slf4j-api:2.0.0")
 
     testImplementation("io.kotest:kotest-runner-junit5:5.5.4")
