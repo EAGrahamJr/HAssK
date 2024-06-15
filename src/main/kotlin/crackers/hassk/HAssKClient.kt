@@ -18,6 +18,7 @@ package crackers.hassk
 
 import org.json.JSONArray
 import org.json.JSONObject
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.IOException
 import java.net.URI
@@ -50,6 +51,13 @@ object Constants {
 }
 
 /**
+ * Media things
+ */
+object MediaConstants {
+    const val SPOTIFY = "Spotify"
+}
+
+/**
  * A very simple [HomeAssistant](https://www.home-assistant.io/) REST API client with minimal functionality.
  *
  * All requests are multithreaded by the underlying HTTP client. All calls **must** be invoked within the "context" of
@@ -60,12 +68,12 @@ object Constants {
  * @param haPort the port (default sto `8123`
  * @property serverUri the location for the API on HA
  */
-open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) {
-    val serverUri = "http://$haServer:$haPort/api"
-    protected val client = HttpClient.newBuilder()
+open class HAssKClient(private val token: String, haServer: String, haPort: Int = 8123) {
+    protected val serverUri = "http://$haServer:$haPort/api"
+    protected val client: HttpClient = HttpClient.newBuilder()
         .version(HttpClient.Version.HTTP_1_1)
         .build()
-    protected val logger = LoggerFactory.getLogger(javaClass.simpleName)
+    protected val logger: Logger = LoggerFactory.getLogger(javaClass.simpleName)
 
     /**
      * Set up generic service call that uses the entity ID as the payload.
@@ -220,8 +228,13 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
 
     /**
      * Create an entity in the "media_player" domain ( do **not** prefix with "media_player.")
+     *
+     * Specialized players are also initialized here (e.g. Spotify)
      */
-    fun media(name: String) = MediaPlayer(name)
+    fun media(name: String) = when {
+        name.equals(MediaConstants.SPOTIFY, true) -> SpotifyPlayer(name)
+        else -> MediaPlayer(name)
+    }
 
     /**
      * Create an entity in the "sensor" domain (do **not** prefix with "sensor.")
@@ -287,9 +300,13 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
         override val entityId = "$domain.$name"
     }
 
-    class MediaPlayer(val name: String) : Entity {
-        override val domain = "media_player"
+    open class MediaPlayer(name: String) : Entity {
+        final override val domain = "media_player"
         override val entityId = "$domain.$name"
+    }
+
+    class SpotifyPlayer(name: String) : MediaPlayer(name) {
+        var currentPlayer: String = "None"
     }
 
     fun MediaPlayer.pause(): List<EntityState> {
@@ -298,6 +315,15 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
     }
 
     fun MediaPlayer.play(): List<EntityState> {
+        val response = callService(entityId, domain, "media_play")
+        return JSONArray(response).map { parseState(it as JSONObject) }
+    }
+
+    fun SpotifyPlayer.play(player: String? = null): List<EntityState> {
+        if (player != null) currentPlayer = player
+        if (currentPlayer == "None") throw IllegalStateException("Current player must be set before invoking play")
+
+        callService(entityId, domain, "select_source", mapOf("source" to currentPlayer))
         val response = callService(entityId, domain, "media_play")
         return JSONArray(response).map { parseState(it as JSONObject) }
     }
@@ -329,9 +355,4 @@ open class HAssKClient(val token: String, haServer: String, haPort: Int = 8123) 
 
     operator fun MediaPlayer.unaryPlus() = volumeUp()
     operator fun MediaPlayer.unaryMinus() = volumeDown()
-
-    infix fun MediaPlayer.selectSource(name: String): List<EntityState> {
-        val response = callService(entityId, domain, "play_media", mapOf("source" to name))
-        return JSONArray(response).map { parseState(it as JSONObject) }
-    }
 }
