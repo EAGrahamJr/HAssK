@@ -1,8 +1,10 @@
 # HomeAssistant Client for Kotlin
 
 - Extremely simple API with some DSL goodies
-- Requires Java 11<sup>**1**</sup> for included HttpClient stuff
-  - uses _async_ under the covers, so multi-threading is provided out-of-the-box
+- Uses _async_ under the covers, so limited multi-threading is provided out-of-the-box
+- Runtime requires:
+  - Java 17 or newer
+  - Kotlin 1.9.0 or newer
 - Minimal external libraries (`SLF4J`, `org.json`)
 
 ![Just Build](https://github.com/EAGrahamJr/HAssK/actions/workflows/build.yaml/badge.svg) ![Kotlin](https://badgen.net/badge/Kotlin/1.9,0/purple)  ![Java](https://badgen.net/badge/Java/17/orange) ![Apache License](https://badgen.net/github/license/EAGrahamJr/HAssK)
@@ -38,7 +40,3 @@ This project uses [Gradle](https://gradle.org), so the only thing you need is a 
 A default build will use the [gradle-plugins](https://github.com/EAGrahamJr/gradle-scripts) to publish to the "local" Maven repository.
 
 [Documentation](docs) is created via the `dokka` plugin: Javadocs **are** created on build (but not published, yet).
-
----
-
-<sup>**1**</sup>Java 17 is the current build target.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 by E. A. Graham, Jr.
+ * Copyright 2022-2024 by E. A. Graham, Jr.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +69,7 @@ object MediaConstants {
  * @property serverUri the location for the API on HA
  */
 open class HAssKClient(private val token: String, haServer: String, haPort: Int = 8123) {
-    protected val serverUri = "http://$haServer:$haPort/api"
+    val serverUri = "http://$haServer:$haPort/api"
     protected val client: HttpClient = HttpClient.newBuilder()
         .version(HttpClient.Version.HTTP_1_1)
         .build()
@@ -99,7 +99,7 @@ open class HAssKClient(private val token: String, haServer: String, haPort: Int 
                 logger.debug("Request: {}", uri)
                 logger.debug("Payload: $payload")
             }
-        return sendIt(request)
+        return sendIt(request, entityId, serviceCommand)
     }
 
     /**
@@ -112,7 +112,7 @@ open class HAssKClient(private val token: String, haServer: String, haPort: Int 
         val request = startRequest(uri)
             .GET()
             .build()
-        return sendIt(request).let {
+        return sendIt(request, entityId, "states").let {
             logger.debug("Receiving: $it")
             parseState(JSONObject(it))
         }
@@ -141,11 +141,12 @@ open class HAssKClient(private val token: String, haServer: String, haPort: Int 
     /**
      * Off we go... (call [startRequest] to kick things off)
      */
-    fun sendIt(request: HttpRequest): String {
+    fun sendIt(request: HttpRequest, entity: String, command: String): String {
         return client.sendAsync(request, requestPayloadHandler).let {
             val response = it.get()
             if (response.statusCode() != 200) {
-                logger.error("Error response: ${response.statusCode()}")
+                logger.error("Error response for entity '$entity' doing '$command': ${response.statusCode()}")
+                logger.error("\t${response.body()}")
                 throw IOException("Error from HA - see logs")
             }
             response.body().also {
@@ -248,7 +249,7 @@ open class HAssKClient(private val token: String, haServer: String, haPort: Int 
      * Uses the state JSON API to get a list of entities and their states. It is filtered by the optional [domain].
      */
     fun states(domain: String? = null): List<EntityState> {
-        val response = sendIt(startRequest(URI.create("$serverUri/states")).build())
+        val response = sendIt(startRequest(URI.create("$serverUri/states")).build(), "all", "states")
         return JSONArray(response)
             .map { parseState(it as JSONObject) }
             .filter { domain == null || it.entityId.startsWith("$domain.") }
@@ -305,6 +306,9 @@ open class HAssKClient(private val token: String, haServer: String, haPort: Int 
         override val entityId = "$domain.$name"
     }
 
+    /**
+     * A Spotify player has an additional "who's playing" attribute.
+     */
     class SpotifyPlayer(name: String) : MediaPlayer(name) {
         var currentPlayer: String = "None"
     }
