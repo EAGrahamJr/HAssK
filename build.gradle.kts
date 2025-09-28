@@ -15,13 +15,13 @@
  */
 
 plugins {
-    kotlin("jvm") version "1.9.0"
+    kotlin("jvm") version "1.9.23"
     `java-library`
     idea
-    id("org.jmailen.kotlinter") version "3.12.0"
-    id("org.jetbrains.dokka") version "1.8.10"
+    id("org.jmailen.kotlinter") version "4.2.0"
+    id("org.jetbrains.dokka") version "1.9.20"
     id("net.thauvin.erik.gradle.semver") version "1.0.4"
-    id("crackers.buildstuff.crackers-gradle-plugins") version "1.1.0"
+    id("crackers.buildstuff.library-publish") version "1.3.0"
 }
 
 group = "crackers.automation"
@@ -47,7 +47,7 @@ kotlin {
 kotlinter {
     // ignore failures because the build re-formats it
     ignoreFailures = true
-    disabledRules = arrayOf("no-wildcard-imports")
+    // disabledRules = arrayOf("no-wildcard-imports")
 }
 
 

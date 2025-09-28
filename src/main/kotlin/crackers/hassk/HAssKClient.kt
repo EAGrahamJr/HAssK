@@ -39,7 +39,7 @@ data class EntityState(
     val entityId: String,
     val state: String,
     val changed: ZonedDateTime,
-    val attributes: String? = null
+    val attributes: String? = null,
 )
 
 /**
@@ -70,9 +70,10 @@ object MediaConstants {
  */
 open class HAssKClient(private val token: String, haServer: String, haPort: Int = 8123) {
     val serverUri = "http://$haServer:$haPort/api"
-    protected val client: HttpClient = HttpClient.newBuilder()
-        .version(HttpClient.Version.HTTP_1_1)
-        .build()
+    protected val client: HttpClient =
+        HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_1_1)
+            .build()
     protected val logger: Logger = LoggerFactory.getLogger(javaClass.simpleName)
 
     /**
@@ -86,19 +87,21 @@ open class HAssKClient(private val token: String, haServer: String, haPort: Int 
         entityId: String,
         serviceType: String,
         serviceCommand: String,
-        extraData: Map<String, Any> = emptyMap()
+        extraData: Map<String, Any> = emptyMap(),
     ): String {
-        val payload = JSONObject().apply {
-            put("entity_id", entityId)
-            extraData.forEach { (k, v) -> put(k, v) }
-        }.toString()
+        val payload =
+            JSONObject().apply {
+                put("entity_id", entityId)
+                extraData.forEach { (k, v) -> put(k, v) }
+            }.toString()
         val uri = URI.create("$serverUri/services/$serviceType/$serviceCommand")
-        val request = startRequest(uri)
-            .POST(HttpRequest.BodyPublishers.ofString(payload))
-            .build().also {
-                logger.debug("Request: {}", uri)
-                logger.debug("Payload: $payload")
-            }
+        val request =
+            startRequest(uri)
+                .POST(HttpRequest.BodyPublishers.ofString(payload))
+                .build().also {
+                    logger.debug("Request: {}", uri)
+                    logger.debug("Payload: $payload")
+                }
         return sendIt(request, entityId, serviceCommand)
     }
 
@@ -109,9 +112,10 @@ open class HAssKClient(private val token: String, haServer: String, haPort: Int 
      */
     fun getState(entityId: String): EntityState {
         val uri = URI.create("$serverUri/states/$entityId")
-        val request = startRequest(uri)
-            .GET()
-            .build()
+        val request =
+            startRequest(uri)
+                .GET()
+                .build()
         return sendIt(request, entityId, "states").let {
             logger.debug("Receiving: $it")
             parseState(JSONObject(it))
@@ -121,27 +125,33 @@ open class HAssKClient(private val token: String, haServer: String, haPort: Int 
     /**
      * Ibid.
      */
-    protected fun parseState(stateResponse: JSONObject) = EntityState(
-        stateResponse.getString("entity_id"),
-        stateResponse.getString("state"),
-        ZonedDateTime.parse(stateResponse.getString("last_changed")),
-        if (stateResponse.has("attributes")) stateResponse.getJSONObject("attributes").toString() else null
-    )
+    protected fun parseState(stateResponse: JSONObject) =
+        EntityState(
+            stateResponse.getString("entity_id"),
+            stateResponse.getString("state"),
+            ZonedDateTime.parse(stateResponse.getString("last_changed")),
+            if (stateResponse.has("attributes")) stateResponse.getJSONObject("attributes").toString() else null,
+        )
 
     /**
      * Set up the basic request, including auth.
      */
-    fun startRequest(uri: URI) = HttpRequest.newBuilder()
-        .uri(uri)
-        .header("Authorization", "Bearer $token")
-        .header("Content-Type", "application/json")
+    fun startRequest(uri: URI) =
+        HttpRequest.newBuilder()
+            .uri(uri)
+            .header("Authorization", "Bearer $token")
+            .header("Content-Type", "application/json")
 
     protected val requestPayloadHandler = HttpResponse.BodyHandlers.ofString()
 
     /**
      * Off we go... (call [startRequest] to kick things off)
      */
-    fun sendIt(request: HttpRequest, entity: String, command: String): String {
+    fun sendIt(
+        request: HttpRequest,
+        entity: String,
+        command: String,
+    ): String {
         return client.sendAsync(request, requestPayloadHandler).let {
             val response = it.get()
             if (response.statusCode() != 200) {
@@ -232,10 +242,11 @@ open class HAssKClient(private val token: String, haServer: String, haPort: Int 
      *
      * Specialized players are also initialized here (e.g. Spotify)
      */
-    fun media(name: String) = when {
-        name.equals(MediaConstants.SPOTIFY, true) -> SpotifyPlayer(name)
-        else -> MediaPlayer(name)
-    }
+    fun media(name: String) =
+        when {
+            name.equals(MediaConstants.SPOTIFY, true) -> SpotifyPlayer(name)
+            else -> MediaPlayer(name)
+        }
 
     /**
      * Create an entity in the "sensor" domain (do **not** prefix with "sensor.")
@@ -301,6 +312,16 @@ open class HAssKClient(private val token: String, haServer: String, haPort: Int 
         override val entityId = "$domain.$name"
     }
 
+    /**
+     * Select a thing - e.g. a menu item.
+     *
+     * TODO get select items
+     */
+    class Select(name: String, val options: List<String> = emptyList()) : Entity {
+        override val domain = "select"
+        override val entityId = "$domain.$name"
+    }
+
     open class MediaPlayer(name: String) : Entity {
         final override val domain = "media_player"
         override val entityId = "$domain.$name"
@@ -358,5 +379,6 @@ open class HAssKClient(private val token: String, haServer: String, haPort: Int 
     }
 
     operator fun MediaPlayer.unaryPlus() = volumeUp()
+
     operator fun MediaPlayer.unaryMinus() = volumeDown()
 }
